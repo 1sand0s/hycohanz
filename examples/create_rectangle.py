@@ -1,3 +1,4 @@
+
 import hycohanz as hfss
 
 raw_input('Press "Enter" to connect to HFSS.>')
@@ -23,6 +24,7 @@ hfss.create_rectangle(oEditor,  1,
                                 3, 
                                 4,
                                 5,
+                                'mm',
                                 Name='Rectangle1',
                                 Color=(255, 0, 0))
 
