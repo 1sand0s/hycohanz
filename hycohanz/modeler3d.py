@@ -65,9 +65,10 @@ def assign_material(oEditor, partlist, MaterialName="vacuum", SolveInside=True):
 def create_rectangle(   oEditor, 
                         xs, 
                         ys, 
-                        zs, 
+                        zs,
                         width, 
                         height, 
+                        unit,
                         WhichAxis='Z', 
                         Name='Rectangle1', 
                         Flags='', 
@@ -123,11 +124,11 @@ def create_rectangle(   oEditor,
     """
     RectangleParameters = [ "NAME:RectangleParameters",
                             "IsCovered:=", IsCovered,
-                            "XStart:=", Ex(xs).expr,
-                            "YStart:=", Ex(ys).expr,
-                            "ZStart:=", Ex(zs).expr,
-                            "Width:=", Ex(width).expr,
-                            "Height:=", Ex(height).expr,
+                            "XStart:=", Ex(xs).expr+unit,
+                            "YStart:=", Ex(ys).expr+unit,
+                            "ZStart:=", Ex(zs).expr+unit,
+                            "Width:=", Ex(width).expr+unit,
+                            "Height:=", Ex(height).expr+unit,
                             "WhichAxis:=", WhichAxis]
 
     Attributes = [  "NAME:Attributes",
@@ -220,7 +221,7 @@ def create_EQbasedcurve(   oEditor,
                     
     return oEditor.CreateEquationCurve(EquationCurveParameters, Attributes)
 
-def create_circle(oEditor, xc, yc, zc, radius, 
+def create_circle(oEditor, xc, yc, zc, radius,unit, 
                   WhichAxis='Z', 
                   NumSegments=0,
                   Name='Circle1',
@@ -272,10 +273,10 @@ def create_circle(oEditor, xc, yc, zc, radius,
         The actual name of the created object.
     """
     circleparams = ["NAME:CircleParameters", 
-                    "XCenter:=", Ex(xc).expr, 
-                    "YCenter:=", Ex(yc).expr, 
-                    "ZCenter:=", Ex(zc).expr, 
-                    "Radius:=", Ex(radius).expr, 
+                    "XCenter:=", Ex(xc).expr+unit, 
+                    "YCenter:=", Ex(yc).expr+unit, 
+                    "ZCenter:=", Ex(zc).expr+unit, 
+                    "Radius:=", Ex(radius).expr+unit, 
                     "WhichAxis:=", str(WhichAxis), 
                     "NumSegments:=", str(NumSegments)]
 
@@ -290,7 +291,7 @@ def create_circle(oEditor, xc, yc, zc, radius,
 
     return oEditor.CreateCircle(circleparams, attributesarray)
 
-def create_sphere(oEditor, x, y, z, radius,
+def create_sphere(oEditor, x, y, z, radius,unit,
                   Name="Sphere1",
                   Flags="",
                   Color=(132, 132, 193),
@@ -340,10 +341,10 @@ def create_sphere(oEditor, x, y, z, radius,
         
     """
     sphereparametersarray = ["NAME:SphereParameters", 
-                             "XCenter:=", Ex(x).expr, 
-                             "YCenter:=", Ex(y).expr, 
-                             "ZCenter:=", Ex(z).expr, 
-                             "Radius:=", Ex(radius).expr]
+                             "XCenter:=", Ex(x).expr+unit, 
+                             "YCenter:=", Ex(y).expr+unit, 
+                             "ZCenter:=", Ex(z).expr+unit, 
+                             "Radius:=", Ex(radius).expr+unit]
     
     attributesarray = ["NAME:Attributes", 
                        "Name:=",  Name, 
@@ -366,6 +367,7 @@ def create_box( oEditor,
                 xsize, 
                 ysize,
                 zsize,
+                unit,
                 Name='Box1', 
                 Flags='', 
                 Color=(132, 132, 193), 
@@ -420,12 +422,12 @@ def create_box( oEditor,
 
     """
     BoxParameters = [ "NAME:BoxParameters",
-                    "XPosition:=", Ex(xpos).expr,
-                    "YPosition:=", Ex(ypos).expr,
-                    "ZPosition:=", Ex(zpos).expr,
-                    "XSize:=", Ex(xsize).expr,
-                    "YSize:=", Ex(ysize).expr,
-                    "ZSize:=", Ex(zsize).expr]
+                    "XPosition:=", Ex(xpos).expr+unit,
+                    "YPosition:=", Ex(ypos).expr+unit,
+                    "ZPosition:=", Ex(zpos).expr+unit,
+                    "XSize:=", Ex(xsize).expr+unit,
+                    "YSize:=", Ex(ysize).expr+unit,
+                    "ZSize:=", Ex(zsize).expr+unit]
 
     Attributes = [  "NAME:Attributes",
                     "Name:=", Name,
@@ -641,7 +643,7 @@ def get_selections(oEditor):
     """
     return oEditor.GetSelections()
 
-def move(oEditor, partlist, x, y, z, NewPartsModelFlag="Model"):
+def move(oEditor, partlist, x, y, z,unit, NewPartsModelFlag="Model"):
     """
     Move specified parts.
     
@@ -667,9 +669,9 @@ def move(oEditor, partlist, x, y, z, NewPartsModelFlag="Model"):
                        "NewPartsModelFlag:=", NewPartsModelFlag]
                       
     moveparametersarray = ["NAME:TranslateParameters", 
-                           "TranslateVectorX:=", str(Ex(x).expr), 
-                           "TranslateVectorY:=", str(Ex(y).expr), 
-                           "TranslateVectorZ:=", str(Ex(z).expr)]
+                           "TranslateVectorX:=", str(Ex(x).expr+unit), 
+                           "TranslateVectorY:=", str(Ex(y).expr+unit), 
+                           "TranslateVectorZ:=", str(Ex(z).expr+unit)]
     
     oEditor.Move(selectionsarray, moveparametersarray)
 
@@ -776,7 +778,7 @@ def mirror(oEditor, partlist, base, normal):
                        
     oEditor.Mirror(selectionsarray, mirrorparamsarray)
 
-def sweep_along_vector(oEditor, obj_name_list, x, y, z):
+def sweep_along_vector(oEditor, obj_name_list, x, y, z,unit):
     """
     Sweeps the specified 1D or 2D parts along a vector.
     
@@ -808,9 +810,9 @@ def sweep_along_vector(oEditor, obj_name_list, x, y, z):
                               "DraftAngle:=", "0deg", 
                               "DraftType:=", "Round", 
                               "CheckFaceFaceIntersection:=", False, 
-                              "SweepVectorX:=", Ex(x).expr, 
-                              "SweepVectorY:=", Ex(y).expr, 
-                              "SweepVectorZ:=", Ex(z).expr])
+                              "SweepVectorX:=", Ex(x).expr+unit, 
+                              "SweepVectorY:=", Ex(y).expr+unit, 
+                              "SweepVectorZ:=", Ex(z).expr+unit])
 
     return get_selections(oEditor)
 
@@ -1032,7 +1034,7 @@ def import_model(oEditor,
     
     return get_selections(oEditor)
 
-def get_edge_by_position(oEditor, bodyname, x, y, z):
+def get_edge_by_position(oEditor, bodyname, x, y, z,unit):
     """
     Get the edge of a given body that lies at a given position.
     
@@ -1059,9 +1061,9 @@ def get_edge_by_position(oEditor, bodyname, x, y, z):
 #    print(Ex(z).expr)
     positionparameters = ["NAME:EdgeParameters", 
                           "BodyName:=", bodyname,
-                          "Xposition:=", Ex(x).expr,
-                          "YPosition:=", Ex(y).expr,
-                          "ZPosition:=", Ex(z).expr]
+                          "Xposition:=", Ex(x).expr+unit,
+                          "YPosition:=", Ex(y).expr+unit,
+                          "ZPosition:=", Ex(z).expr+unit]
 
     edgeid = oEditor.GetEdgeByPosition(positionparameters)
     
@@ -1205,7 +1207,7 @@ def split(oEditor, partlist,
                        
     return oEditor.Split(selectionsarray, splittoparams)
 
-def get_face_by_position(oEditor, bodyname, x, y, z):
+def get_face_by_position(oEditor, bodyname, x, y, z,unit):
     """
     Get the face of a given body that lies at a given position.
     
@@ -1229,9 +1231,9 @@ def get_face_by_position(oEditor, bodyname, x, y, z):
     """
     positionparameters = ["NAME:Parameters", 
                           "BodyName:=", bodyname,
-                          "Xposition:=", Ex(x).expr,
-                          "YPosition:=", Ex(y).expr,
-                          "ZPosition:=", Ex(z).expr]
+                          "Xposition:=", Ex(x).expr+unit,
+                          "YPosition:=", Ex(y).expr+unit,
+                          "ZPosition:=", Ex(z).expr+unit]
                           
     faceid = oEditor.GetFaceByPosition(positionparameters)
     
