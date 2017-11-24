@@ -1,3 +1,4 @@
+
 import hycohanz as hfss
 
 raw_input('Press "Enter" to connect to HFSS.>')
@@ -25,12 +26,13 @@ objname = hfss.create_rectangle(
     3, 
     4,
     5,
+    'mm',
     Name='Rectangle1',
     Color=(255, 0, 0))
 
 raw_input('Press "Enter" to sweep the rectangle.')
 
-hfss.sweep_along_vector(oEditor, [objname], 0, 0, 1)
+hfss.sweep_along_vector(oEditor, [objname], 0, 0, 1,'mm')
 
 raw_input('Press "Enter" to quit HFSS.>')
 
